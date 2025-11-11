@@ -85,6 +85,21 @@ python pdf_toolkit.py removepw protetto.pdf sbloccato.pdf miaPassword123
 
 # Craccare una password (usando dizionario
 python pdf_toolkit.py crackpw protetto.pdf sbloccato.pdf passwords.txt
+
+# PDF → PNG
+python pdf_toolkit.py pdf2png input.pdf output_folder/
+
+# PDF → DOCX
+python pdf_toolkit.py pdf2docx input.pdf output.docx
+
+# DOCX → PDF
+python pdf_toolkit.py docx2pdf input.docx output.pdf
+
+# Immagine → PDF
+python pdf_toolkit.py img2pdf immagine.jpg output.pdf
+
+# TXT → PDF
+python pdf_toolkit.py txt2pdf note.txt output.pdf
 ```
 
 # Compressione: DPI e qualità
@@ -108,3 +123,4 @@ Contribuisci, segnala bug o proponi miglioramenti!
 ![screenshot](PDFToolkit-screenshots/5.png)
 ![screenshot](PDFToolkit-screenshots/6.png)
 ![screenshot](PDFToolkit-screenshots/7.png)
+![screenshot](PDFToolkit-screenshots/8.png)

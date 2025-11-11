@@ -182,6 +182,125 @@ def txt_to_pdf(input_path, output_path):
     except Exception as e:
         print(f"[!] Errore: {e}")
 
+# --- CONVERSIONI AVANZATE ---
+
+def pdf_to_excel(input_path, output_path):
+    try:
+        from pdf2docx import parse
+        parse(input_path, output_path.replace(".xlsx", ".docx"))  # conversione intermedia
+        print(f"[✓] PDF convertito in Excel (via DOCX): {output_path}")
+    except Exception as e:
+        print(f"[!] Errore: {e}")
+
+def pdf_to_pptx(input_path, output_path):
+    try:
+        from pdf2docx import parse
+        parse(input_path, output_path.replace(".pptx", ".docx"))  # conversione intermedia
+        print(f"[✓] PDF convertito in PowerPoint (via DOCX): {output_path}")
+    except Exception as e:
+        print(f"[!] Errore: {e}")
+
+def pdf_to_jpg(input_path, output_dir):
+    try:
+        doc = fitz.open(input_path)
+        for i, page in enumerate(doc):
+            pix = page.get_pixmap(dpi=150)
+            out_path = os.path.join(output_dir, f"page_{i+1}.jpg")
+            pix.save(out_path)
+        print(f"[✓] PDF convertito in JPG in: {output_dir}")
+    except Exception as e:
+        print(f"[!] Errore: {e}")
+
+def pdf_to_pdfa(input_path, output_path):
+    try:
+        os.system(f'gs -dPDFA=2 -dBATCH -dNOPAUSE -dNOOUTERSAVE -sProcessColorModel=DeviceRGB -sDEVICE=pdfwrite -sPDFACompatibilityPolicy=1 -sOutputFile="{output_path}" "{input_path}"')
+        print(f"[✓] PDF convertito in PDF/A: {output_path}")
+    except Exception as e:
+        print(f"[!] Errore: {e}")
+
+def excel_to_pdf(input_path, output_path):
+    try:
+        if sys.platform.startswith("win"):
+            os.system(f'start /wait excel.exe "{input_path}" /mFileSaveAsPDF "{output_path}"')
+        else:
+            os.system(f'libreoffice --headless --convert-to pdf "{input_path}" --outdir "{os.path.dirname(output_path)}"')
+        print(f"[✓] Excel convertito in PDF: {output_path}")
+    except Exception as e:
+        print(f"[!] Errore: {e}")
+
+def pptx_to_pdf(input_path, output_path):
+    try:
+        if sys.platform.startswith("win"):
+            os.system(f'start /wait powerpnt.exe "{input_path}" /mFileSaveAsPDF "{output_path}"')
+        else:
+            os.system(f'libreoffice --headless --convert-to pdf "{input_path}" --outdir "{os.path.dirname(output_path)}"')
+        print(f"[✓] PowerPoint convertito in PDF: {output_path}")
+    except Exception as e:
+        print(f"[!] Errore: {e}")
+
+def jpg_to_pdf(input_path, output_path):
+    try:
+        from PIL import Image
+        img = Image.open(input_path).convert("RGB")
+        img.save(output_path)
+        print(f"[✓] JPG convertito in PDF: {output_path}")
+    except Exception as e:
+        print(f"[!] Errore: {e}")
+
+# --- STRUMENTI PDF ---
+
+def repair_pdf(input_path, output_path):
+    try:
+        reader = PdfReader(input_path)
+        writer = PdfWriter()
+        for page in reader.pages:
+            writer.add_page(page)
+        with open(output_path, "wb") as f:
+            writer.write(f)
+        print(f"[✓] PDF riparato: {output_path}")
+    except Exception as e:
+        print(f"[!] Errore: {e}")
+
+def rotate_pdf(input_path, output_path, angle):
+    try:
+        reader = PdfReader(input_path)
+        writer = PdfWriter()
+        for page in reader.pages:
+            page.rotate(angle)
+            writer.add_page(page)
+        with open(output_path, "wb") as f:
+            writer.write(f)
+        print(f"[✓] PDF ruotato di {angle}°: {output_path}")
+    except Exception as e:
+        print(f"[!] Errore: {e}")
+
+def sign_pdf(input_path, output_path, image_path, position="bottom-right"):
+    try:
+        doc = fitz.open(input_path)
+        img = fitz.open(image_path)
+        rect = fitz.Rect(50, 50, 200, 100)  # posizione fissa per ora
+        page = doc[-1]
+        page.insert_image(rect, filename=image_path)
+        doc.save(output_path)
+        print(f"[✓] PDF firmato con immagine: {output_path}")
+    except Exception as e:
+        print(f"[!] Errore: {e}")
+
+def watermark_pdf(input_path, output_path, text=None, image=None, opacity=0.3, position="center", font="helv", size=36):
+    try:
+        doc = fitz.open(input_path)
+        for page in doc:
+            if text:
+                rect = page.rect
+                page.insert_textbox(rect, text, fontsize=size, fontname=font, rotate=0, color=(0, 0, 0), fill_opacity=opacity, align=1)
+            elif image:
+                img = fitz.open(image)
+                rect = fitz.Rect(100, 100, 300, 200)
+                page.insert_image(rect, filename=image, overlay=True, keep_proportion=True, opacity=opacity)
+        doc.save(output_path)
+        print(f"[✓] Filigrana aggiunta: {output_path}")
+    except Exception as e:
+        print(f"[!] Errore: {e}")
 
 
 # ------------------ GUI ------------------
@@ -189,7 +308,7 @@ def txt_to_pdf(input_path, output_path):
 def launch_gui():
     root = tk.Tk()
     root.title("PDF Toolkit")
-    root.geometry("1100x400")
+    root.geometry("1250x400")
     notebook = ttk.Notebook(root)
     notebook.pack(expand=True, fill="both")
 
@@ -374,6 +493,106 @@ def launch_gui():
     tk.Button(convert_frame, text="🖼️ Immagine → PDF", command=gui_img2pdf).pack(pady=5)
     tk.Button(convert_frame, text="📄 TXT → PDF", command=gui_txt2pdf).pack(pady=5)
 
+
+    tools_frame = ttk.Frame(notebook)
+    notebook.add(tools_frame, text="🧰 Strumenti PDF")
+
+    tk.Label(tools_frame, text="Strumenti avanzati per PDF", font=("Arial", 12)).pack(pady=10)
+
+    def gui_pdf2excel():
+        input_path = filedialog.askopenfilename(filetypes=[("PDF files", "*.pdf")])
+        output_path = filedialog.asksaveasfilename(defaultextension=".xlsx")
+        pdf_to_excel(input_path, output_path)
+        ask_open_folder(output_path)
+
+    def gui_pdf2pptx():
+        input_path = filedialog.askopenfilename(filetypes=[("PDF files", "*.pdf")])
+        output_path = filedialog.asksaveasfilename(defaultextension=".pptx")
+        pdf_to_pptx(input_path, output_path)
+        ask_open_folder(output_path)
+
+    def gui_pdf2jpg():
+        input_path = filedialog.askopenfilename(filetypes=[("PDF files", "*.pdf")])
+        output_dir = filedialog.askdirectory()
+        pdf_to_jpg(input_path, output_dir)
+        ask_open_folder(output_dir)
+
+    def gui_pdf2pdfa():
+        input_path = filedialog.askopenfilename(filetypes=[("PDF files", "*.pdf")])
+        output_path = filedialog.asksaveasfilename(defaultextension=".pdf")
+        pdf_to_pdfa(input_path, output_path)
+        ask_open_folder(output_path)
+
+    def gui_excel2pdf():
+        input_path = filedialog.askopenfilename(filetypes=[("Excel files", "*.xlsx")])
+        output_path = filedialog.asksaveasfilename(defaultextension=".pdf")
+        excel_to_pdf(input_path, output_path)
+        ask_open_folder(output_path)
+
+    def gui_pptx2pdf():
+        input_path = filedialog.askopenfilename(filetypes=[("PowerPoint files", "*.pptx")])
+        output_path = filedialog.asksaveasfilename(defaultextension=".pdf")
+        pptx_to_pdf(input_path, output_path)
+        ask_open_folder(output_path)
+
+    def gui_jpg2pdf():
+        input_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg")])
+        output_path = filedialog.asksaveasfilename(defaultextension=".pdf")
+        jpg_to_pdf(input_path, output_path)
+        ask_open_folder(output_path)
+
+    def gui_repairpdf():
+        input_path = filedialog.askopenfilename(filetypes=[("PDF files", "*.pdf")])
+        output_path = filedialog.asksaveasfilename(defaultextension=".pdf")
+        repair_pdf(input_path, output_path)
+        ask_open_folder(output_path)
+
+    def gui_rotatepdf():
+        input_path = filedialog.askopenfilename(filetypes=[("PDF files", "*.pdf")])
+        angle = tk.simpledialog.askinteger("Rotazione", "Inserisci angolo (90, 180, 270):", minvalue=0, maxvalue=360)
+        output_path = filedialog.asksaveasfilename(defaultextension=".pdf")
+        rotate_pdf(input_path, output_path, angle)
+        ask_open_folder(output_path)
+
+    def gui_signpdf():
+        input_path = filedialog.askopenfilename(filetypes=[("PDF files", "*.pdf")])
+        image_path = filedialog.askopenfilename(filetypes=[("Image files", "*.png;*.jpg")])
+        output_path = filedialog.asksaveasfilename(defaultextension=".pdf")
+        sign_pdf(input_path, output_path, image_path)
+        ask_open_folder(output_path)
+
+    def gui_watermark():
+        input_path = filedialog.askopenfilename(filetypes=[("PDF files", "*.pdf")])
+        output_path = filedialog.asksaveasfilename(defaultextension=".pdf")
+        choice = messagebox.askquestion("Tipo di filigrana", "Vuoi usare un'immagine come filigrana?")
+        if choice == "yes":
+            image_path = filedialog.askopenfilename(filetypes=[("Image files", "*.png;*.jpg")])
+            watermark_pdf(input_path, output_path, image=image_path)
+        else:
+            text = tk.simpledialog.askstring("Testo", "Inserisci il testo della filigrana:")
+            opacity = tk.simpledialog.askfloat("Trasparenza", "Inserisci opacità (0.0 - 1.0):", minvalue=0.0, maxvalue=1.0)
+            font = tk.simpledialog.askstring("Font", "Nome font (es. helv, times):")
+            size = tk.simpledialog.askinteger("Dimensione", "Dimensione testo:", minvalue=10, maxvalue=100)
+            watermark_pdf(input_path, output_path, text=text, opacity=opacity, font=font, size=size)
+        ask_open_folder(output_path)
+
+    # Pulsanti
+    tk.Button(tools_frame, text="📊 PDF → Excel", command=gui_pdf2excel).pack(pady=3)
+    tk.Button(tools_frame, text="📽 PDF → PowerPoint", command=gui_pdf2pptx).pack(pady=3)
+    tk.Button(tools_frame, text="🖼 PDF → JPG", command=gui_pdf2jpg).pack(pady=3)
+    tk.Button(tools_frame, text="📁 PDF → PDF/A", command=gui_pdf2pdfa).pack(pady=3)
+    tk.Button(tools_frame, text="📥 Excel → PDF", command=gui_excel2pdf).pack(pady=3)
+    tk.Button(tools_frame, text="📥 PowerPoint → PDF", command=gui_pptx2pdf).pack(pady=3)
+    tk.Button(tools_frame, text="🖼 JPG → PDF", command=gui_jpg2pdf).pack(pady=3)
+    tk.Button(tools_frame, text="🛠 Ripara PDF", command=gui_repairpdf).pack(pady=3)
+    tk.Button(tools_frame, text="🔄 Ruota PDF", command=gui_rotatepdf).pack(pady=3)
+    tk.Button(tools_frame, text="✍ Firma PDF", command=gui_signpdf).pack(pady=3)
+    tk.Button(tools_frame, text="💧 Watermark/Filigrana PDF", command=gui_watermark).pack(pady=3)
+
+
+
+
+
     def ask_open_folder(path):
         folder = os.path.dirname(path) if os.path.isfile(path) else path
         if messagebox.askyesno("Apri cartella", "Vuoi aprire la cartella di destinazione?"):
@@ -458,9 +677,63 @@ def parse_cli():
     txt2pdf_cmd = subparsers.add_parser("txt2pdf", help="Converti file TXT in PDF")
     txt2pdf_cmd.add_argument("input", help="File TXT da convertire")
     txt2pdf_cmd.add_argument("output", help="File PDF di destinazione")
+        
+    pdf2excel = subparsers.add_parser("pdf2excel", help="Converti PDF in Excel")
+    pdf2excel.add_argument("input", help="PDF da convertire")
+    pdf2excel.add_argument("output", help="File Excel di destinazione (.xlsx)")
+
+    pdf2pptx = subparsers.add_parser("pdf2pptx", help="Converti PDF in PowerPoint")
+    pdf2pptx.add_argument("input", help="PDF da convertire")
+    pdf2pptx.add_argument("output", help="File PPTX di destinazione (.pptx)")
+
+    pdf2jpg = subparsers.add_parser("pdf2jpg", help="Converti PDF in JPG")
+    pdf2jpg.add_argument("input", help="PDF da convertire")
+    pdf2jpg.add_argument("output_dir", help="Cartella di destinazione")
+
+    pdf2pdfa = subparsers.add_parser("pdf2pdfa", help="Converti PDF in PDF/A")
+    pdf2pdfa.add_argument("input", help="PDF da convertire")
+    pdf2pdfa.add_argument("output", help="File PDF/A di destinazione")
+
+    excel2pdf = subparsers.add_parser("excel2pdf", help="Converti Excel in PDF")
+    excel2pdf.add_argument("input", help="File Excel da convertire")
+    excel2pdf.add_argument("output", help="File PDF di destinazione")
+
+    pptx2pdf = subparsers.add_parser("pptx2pdf", help="Converti PowerPoint in PDF")
+    pptx2pdf.add_argument("input", help="File PPTX da convertire")
+    pptx2pdf.add_argument("output", help="File PDF di destinazione")
+
+    jpg2pdf = subparsers.add_parser("jpg2pdf", help="Converti JPG in PDF")
+    jpg2pdf.add_argument("input", help="File JPG da convertire")
+    jpg2pdf.add_argument("output", help="File PDF di destinazione")
     # Converti: EOF
-    
-    
+
+    # Strumenti PDF
+    repairpdf = subparsers.add_parser("repairpdf", help="Ripara un PDF danneggiato")
+    repairpdf.add_argument("input", help="PDF da riparare")
+    repairpdf.add_argument("output", help="PDF riparato")
+
+    rotatepdf = subparsers.add_parser("rotatepdf", help="Ruota le pagine di un PDF")
+    rotatepdf.add_argument("input", help="PDF da ruotare")
+    rotatepdf.add_argument("output", help="PDF ruotato")
+    rotatepdf.add_argument("--angle", type=int, choices=[90, 180, 270], default=90, help="Angolo di rotazione")
+
+    signpdf = subparsers.add_parser("signpdf", help="Firma un PDF con immagine")
+    signpdf.add_argument("input", help="PDF da firmare")
+    signpdf.add_argument("output", help="PDF firmato")
+    signpdf.add_argument("--image", required=True, help="Immagine della firma")
+    signpdf.add_argument("--position", default="bottom-right", help="Posizione firma (default: bottom-right)")
+
+    watermark = subparsers.add_parser("watermark", help="Aggiungi filigrana a un PDF")
+    watermark.add_argument("input", help="PDF da modificare")
+    watermark.add_argument("output", help="PDF con filigrana")
+    group = watermark.add_mutually_exclusive_group(required=True)
+    group.add_argument("--text", help="Testo della filigrana")
+    group.add_argument("--image", help="Immagine da usare come filigrana")
+    watermark.add_argument("--opacity", type=float, default=0.3, help="Trasparenza (0.0 - 1.0)")
+    watermark.add_argument("--position", default="center", help="Posizione (es. center, top, bottom)")
+    watermark.add_argument("--font", default="helv", help="Font del testo")
+    watermark.add_argument("--size", type=int, default=36, help="Dimensione del testo")
+
 
     args = parser.parse_args()
     if args.command == "compress":
@@ -491,6 +764,28 @@ def parse_cli():
         image_to_pdf(args.input, args.output)
     elif args.command == "txt2pdf":
         txt_to_pdf(args.input, args.output)
+    elif args.command == "pdf2excel":
+        pdf_to_excel(args.input, args.output)
+    elif args.command == "pdf2pptx":
+        pdf_to_pptx(args.input, args.output)
+    elif args.command == "pdf2jpg":
+        pdf_to_jpg(args.input, args.output_dir)
+    elif args.command == "pdf2pdfa":
+        pdf_to_pdfa(args.input, args.output)
+    elif args.command == "excel2pdf":
+        excel_to_pdf(args.input, args.output)
+    elif args.command == "pptx2pdf":
+        pptx_to_pdf(args.input, args.output)
+    elif args.command == "jpg2pdf":
+        jpg_to_pdf(args.input, args.output)
+    elif args.command == "repairpdf":
+        repair_pdf(args.input, args.output)
+    elif args.command == "rotatepdf":
+        rotate_pdf(args.input, args.output, args.angle)
+    elif args.command == "signpdf":
+        sign_pdf(args.input, args.output, args.image, args.position)
+    elif args.command == "watermark":
+        watermark_pdf(args.input, args.output, text=args.text, image=args.image, opacity=args.opacity, position=args.position, font=args.font, size=args.size)
 
     else:
         launch_gui()

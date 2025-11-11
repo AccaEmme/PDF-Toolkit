@@ -21,19 +21,20 @@ cd pdf-toolkit
 ```
 2. Installa le dipendenze
 ```bash
-pip install pymupdf PyPDF2
+pip install openpyxl python-pptx pdf2docx pillow reportlab PyMuPDF PyPDF2 docx2pdf reportlab
 ```
 
 ## Linux
-Si necessita di avere python installato.
+Si necessita di avere python installato e le dipendenze per manipolare le conversioni pdf
 1. Clona il repository
 ```bash
+sudo apt install libreoffice ghostscript
 git clone https://github.com/AccaEmme/PDF-Toolkit.git
 cd pdf-toolkit
 ```
 3. Installa le dipendenze
 ```bash
-pip install pymupdf PyPDF2
+pip install openpyxl python-pptx pdf2docx pillow reportlab PyMuPDF PyPDF2 docx2pdf reportlab
 ```
 
 # Come eseguirlo

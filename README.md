@@ -62,6 +62,15 @@ python pdf_toolkit.py compress input.pdf output.pdf --dpi 50
 - 🔐 Aggiungi password
 - 🔓 Rimuovi password
 - ⚠️ Cracca password (solo per file di cui sei proprietario)
+- 🔄 Conversioni supportate: Puoi convertire file PDF in altri formati e viceversa, sia da interfaccia grafica (GUI) che da riga di comando (CLI).
+    * 📤 Da PDF verso:
+        - pdf2png → Estrae ogni pagina del PDF come immagine PNG
+        - pdf2docx → Converte PDF in documento Word modificabile
+        - pdf2html → (non ancora implementato) Converti PDF in HTML
+    * 📥 Verso PDF da:
+        - docx2pdf → Converte file Word .docx in PDF
+        - img2pdf → Converte immagini (.png, .jpg, .bmp) in PDF
+        - txt2pdf → Converte file di testo .txt in PDF
 - ℹ️ About Me
 
 ### >_⌨️ CLI (riga di comando)

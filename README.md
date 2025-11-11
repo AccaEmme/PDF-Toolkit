@@ -1,2 +1,109 @@
 # PDF-Toolkit
 PDF Toolkit :: il coltellino svizzero gratuito e open source per gestire i PDF
+
+# 📚 PDF Toolkit – GUI + CLI per comprimere, unire, dividere e proteggere PDF
+
+PDF Toolkit è un'applicazione Python multipiattaforma che ti permette di **comprimere**, **accorpare**, **splittare**, **proteggere** e **sbloccare** file PDF. Può essere utilizzata sia con una **interfaccia grafica (GUI)** intuitiva che da **riga di comando (CLI)** per automazioni e script.
+
+> ✅ Compatibile con **Windows** e **Linux**  
+> ✅ Basato su **PyMuPDF**, **PyPDF2** e **Tkinter**  
+> ✅ Nessuna dipendenza esterna pesante
+
+---
+# Installazione
+## Windows
+Si necessita di avere python installato.
+
+1. Clona il repository
+```bash
+git clone https://github.com/AccaEmme/PDF-Toolkit.git
+cd pdf-toolkit
+2. Installa le dipendenze
+```bash
+pip install pymupdf PyPDF2
+```
+
+## Linux
+Si necessita di avere python installato.
+1. Clona il repository
+```bash
+git clone https://github.com/AccaEmme/PDF-Toolkit.git
+cd pdf-toolkit
+```
+3. Installa le dipendenze
+```bash
+pip install pymupdf PyPDF2
+```
+
+# Come eseguirlo
+## Su Windows con GUI (interfaccia grafica)
+```bash
+python pdf_toolkit.py
+```
+
+## Su Linux con GUI (interfaccia grafica)
+```bash
+python3 pdf_toolkit.py
+```
+
+## Su Windows/Linux da CLI (CommandLine Interface)
+```bash
+python pdf_toolkit.py compress input.pdf output.pdf --dpi 50
+```
+
+
+## 🚀 Funzionalità
+
+### GUI (interfaccia grafica)
+- 📉 Compressore PDF (DPI personalizzabile)
+- 📎 Accorpa PDF
+- ✂️ Splitta PDF
+- 🔐 Aggiungi password
+- 🔓 Rimuovi password
+- ⚠️ Cracca password (solo per file di cui sei proprietario)
+- ℹ️ About Me
+
+### CLI (riga di comando)
+Esegui le stesse operazioni direttamente da terminale:
+
+```bash
+# Comprimere un PDF
+python pdf_toolkit.py compress input.pdf output.pdf --dpi 50
+
+# Unire più PDF
+python pdf_toolkit.py merge file1.pdf file2.pdf file3.pdf output.pdf
+
+# Dividere un PDF in pagine singole
+python pdf_toolkit.py split input.pdf
+
+# Aggiungere una password
+python pdf_toolkit.py addpw input.pdf output.pdf miaPassword123
+
+# Rimuovere una password
+python pdf_toolkit.py removepw protetto.pdf sbloccato.pdf miaPassword123
+
+# Craccare una password (usando dizionario
+python pdf_toolkit.py crackpw protetto.pdf sbloccato.pdf passwords.txt
+```
+
+# Compressione: DPI e qualità
+| DPI | Qualità | Note |
+| --- | ------- | ---- |
+| 30-50   | Alta compressione     | Testo leggibile forse sfocato, file molto leggero |
+| 72 | 🖥️ standard per schermo | Buon compromesso: file leggibile | 
+| 150 | 🖨️ Qualità da stampa leggera	| File più pesante |
+| 300+ | Qualità elevata | File molto grande |
+
+# 📄 Licenza
+Questo progetto è distribuito sotto licenza MIT. Vedi il file LICENSE per i dettagli.
+Contribuisci, segnala bug o proponi miglioramenti!
+
+
+# Screenshots
+![screenshot](PDFToolkit-screenshots/1.png)
+![screenshot](PDFToolkit-screenshots/2.png)
+![screenshot](PDFToolkit-screenshots/3.png)
+![screenshot](PDFToolkit-screenshots/4.png)
+![screenshot](PDFToolkit-screenshots/5.png)
+![screenshot](PDFToolkit-screenshots/6.png)
+![screenshot](PDFToolkit-screenshots/7.png)

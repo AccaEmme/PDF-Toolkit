@@ -18,6 +18,7 @@ Si necessita di avere python installato.
 ```bash
 git clone https://github.com/AccaEmme/PDF-Toolkit.git
 cd pdf-toolkit
+```
 2. Installa le dipendenze
 ```bash
 pip install pymupdf PyPDF2
@@ -63,7 +64,7 @@ python pdf_toolkit.py compress input.pdf output.pdf --dpi 50
 - ⚠️ Cracca password (solo per file di cui sei proprietario)
 - ℹ️ About Me
 
-### CLI (riga di comando)
+### >_⌨️ CLI (riga di comando)
 Esegui le stesse operazioni direttamente da terminale:
 
 ```bash

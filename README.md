@@ -4,6 +4,7 @@ PDF Toolkit :: il coltellino svizzero gratuito e open source per gestire i PDF
 # 📚 PDF Toolkit – GUI + CLI per comprimere, unire, dividere e proteggere PDF
 
 PDF Toolkit è un'applicazione Python multipiattaforma che ti permette di **comprimere**, **accorpare**, **splittare**, **proteggere** e **sbloccare** file PDF. Può essere utilizzata sia con una **interfaccia grafica (GUI)** intuitiva che da **riga di comando (CLI)** per automazioni e script.
+Il programma può funzionare OFFLINE, non ha bisogno di connessione internet, i tuoi PDF sono al sicuro, non verranno inviati fuori dalla tua rete.
 
 > ✅ Compatibile con **Windows** e **Linux**  
 > ✅ Basato su **PyMuPDF**, **PyPDF2** e **Tkinter**  

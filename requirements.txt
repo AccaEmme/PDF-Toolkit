@@ -1,0 +1,9 @@
+openpyxl 
+python-pptx 
+pdf2docx
+pillow 
+reportlab 
+PyMuPDF 
+PyPDF2 
+docx2pdf 
+reportlab

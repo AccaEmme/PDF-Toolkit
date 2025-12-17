@@ -8,7 +8,7 @@ from PyPDF2 import PdfMerger, PdfReader, PdfWriter
 
 # @Author: AccaEmme
 # @Created on: 10th of November 2025
-# @Last Update: 11th of November 2025
+# @Last Update: 17th of December 2025
 # @GitHub: https://github.com/AccaEmme/PDF-Toolkit
 
 # Esempi:
@@ -307,7 +307,7 @@ def watermark_pdf(input_path, output_path, text=None, image=None, opacity=0.3, p
 
 def launch_gui():
     root = tk.Tk()
-    root.title("PDF Toolkit")
+    root.title("PDF Toolkit - https://github.com/AccaEmme/")
     root.geometry("1250x400")
     notebook = ttk.Notebook(root)
     notebook.pack(expand=True, fill="both")
@@ -797,3 +797,4 @@ if __name__ == "__main__":
         parse_cli()
     else:
         launch_gui()
+

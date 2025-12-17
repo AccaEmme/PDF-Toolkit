@@ -19,9 +19,16 @@ Si necessita di avere python installato.
 git clone https://github.com/AccaEmme/PDF-Toolkit.git
 cd pdf-toolkit
 ```
-2. Installa le dipendenze
+2. Installa le dipendenze in modo globale
 ```bash
 pip install openpyxl python-pptx pdf2docx pillow reportlab PyMuPDF PyPDF2 docx2pdf reportlab
+```
+
+2. Oppure installa le dipendenze in un ambiente virtuale (per non "sporcare" l'installazione globale)
+```bash
+python3 -m venv venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
 ```
 
 ## Linux
